@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"strings"
 	"strconv"
 	"fmt"
@@ -39,29 +40,50 @@ func runWeb(c *cli.Context) {
 		log.Fatal("Db not found")
 	}
 	defer db.Close()
-	http.HandleFunc("/api", func (w http.ResponseWriter, r *http.Request) {
-		zip := "95111"
-		result := fetchZip(db, zip)
-		b, err := json.Marshal(result)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/api/", func (w http.ResponseWriter, r *http.Request) {
+		log.Printf(r.URL.Path)
+		urlSegment := strings.Split(r.URL.Path, "/")
+		if len(urlSegment)<2 {
+			io.WriteString(w, "{\"error\":\"Zip not found\"}")
+			//w.Header().Set("Content-Type", "application/json")
+			panic("Fail to parse URL")
+		}
+		log.Printf("Result %v", urlSegment)
+		zip := urlSegment[2]
+		log.Printf("zip= %v.", zip)
+		result, err := fetchZip(db, zip)
 		if err != nil {
-			io.WriteString(w, "ZIp not found")
+			io.WriteString(w, "{\"error\":\"Zip not found\"}")
 		} else {
-			io.WriteString(w, string(b))
+
+			b, err := json.Marshal(result)
+			w.Header().Set("Content-Type", "application/json")
+			if err != nil {
+				io.WriteString(w, "{\"error\":\"Zip not found\"}")
+			} else {
+				io.WriteString(w, string(b))
+			}
 		}
 	})
-	err = http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
-  if err != nil {
-		panic(err)
-  }
+	mux.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("curl -i domain/api/zip"))
+	})
+
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), mux)
+  //if err != nil {
+		//panic(err)
+  //}
 	log.Println("Finish webing!")
 	//fetchAllZip(db)
 }
 
-func fetchZip(db *leveldb.DB, zip string) *zipi.Point {
+func fetchZip(db *leveldb.DB, zip string) (*zipi.Point, error) {
 	//geocoder := new(zip.Point)
 	geo, err := db.Get([]byte(zip), nil)
 	if err != nil {
-		log.Fatal("Canot found the zip code")
+		return nil, errors.New(fmt.Sprintf("zip: %v not found", zip))
 	}
 	fmt.Printf("Geo Byte Array: %v", geo)
 
@@ -79,7 +101,7 @@ func fetchZip(db *leveldb.DB, zip string) *zipi.Point {
 	geocoder.Y = y
 
 	fmt.Printf("Geo Coder: x= %v, y=%v", geocoder.X, geocoder.Y)
-	return geocoder
+	return geocoder, nil
 }
 
 func fetchAllZip(db *leveldb.DB) {
