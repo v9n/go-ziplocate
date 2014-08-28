@@ -12,7 +12,7 @@ const APP_VER = "0.0.1"
 func main() {
 	app := cli.NewApp()
 	app.Name = "gozip"
-	app.Usage = "Geocoder for ZIP"
+	app.Usage = "Geocoder for code ZIP code"
 	app.Version = APP_VER
 	app.Commands = []cli.Command{
 		cmd.CmdWeb,

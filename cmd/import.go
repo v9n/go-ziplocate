@@ -10,7 +10,7 @@ import (
 
 var CmdImport = cli.Command{
 	Name: "import",
-	Usage: "gozip -f shapefile",
+	Usage: "import -f shapefile",
 	Description: `Import shapefile into GoZip database which is backed by leveldb`,
 	Action: runImport,
 	Flags: []cli.Flag{
@@ -25,6 +25,7 @@ var CmdImport = cli.Command{
 func runImport(c *cli.Context) {
 	var file = c.String("file")
 	log.Printf("Importing local repositories...%s", file)
+	open(file)
 	log.Println("Finish importing!")
 }
 
