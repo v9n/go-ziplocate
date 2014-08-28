@@ -3,12 +3,21 @@ go-ziplocate
 
 Clone https://github.com/nathancahill/ZipLocate/ in Go Lang
 
+By using Go Lang with a single binary to deploy, and LevelDB for
+storage, this small app can be run quite easily without any dependency.
+Just clone this repository and run it.
+
 The pre-built binary is for MAC. Please rebuild if you use Linux
 
 ```
 $ go get
 $ go build
 ```
+
+# Demo
+
+* [http://gozip.axcoto.com/api/95136](http://gozip.axcoto.com/api/95136)
+* [http://gozip.axcoto.com/api/08861](http://gozip.axcoto.com/api/08861)
 
 # Using
 
