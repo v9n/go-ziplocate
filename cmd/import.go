@@ -6,7 +6,14 @@ import (
 	"log"
 	"github.com/codegangsta/cli"
 	"github.com/jonas-p/go-shp"
+	//"code.google.com/p/leveldb-go/leveldb"
+	"github.com/syndtr/goleveldb/leveldb"
 )
+
+type Point struct {
+	X float64 
+	Y float64
+}
 
 var CmdImport = cli.Command{
 	Name: "import",
@@ -37,12 +44,24 @@ func open(file string) {
 	// fields from the attribute table (DBF)
 	fields := shape.Fields()
 
+	db, err := leveldb.OpenFile("zipdata", nil)
+	defer db.Close()
+
 	// loop through all features in the shapefile
+	var centroid Point
+	var boundary shp.Box
 	for shape.Next() {
 			n, p := shape.Shape()
-
+			boundary = p.BBox()
 			// print feature
-			fmt.Println(reflect.TypeOf(p).Elem(), p.BBox())
+			fmt.Println(reflect.TypeOf(p).Elem(), boundary)
+
+			centroid.X = (boundary.MinX + boundary.MaxX) / 2
+			centroid.Y = (boundary.MinY + boundary.MaxY) / 2
+			fmt.Println(centroid)
+			
+			//This is a naive way to convert struct to string to byte. Probably http://golang.org/pkg/encoding/gob/ is better
+			db.Put([]byte(shape.ReadAttribute(n, 0)), []byte(fmt.Sprintf("%v", centroid)), nil)
 
 			// print attributes
 			for k, f := range fields {
