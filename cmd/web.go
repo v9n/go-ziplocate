@@ -3,9 +3,14 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"bytes"
+	"encoding/binary"
+
 	"github.com/codegangsta/cli"
 	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/kureikain/go-ziplocate/lib"
 )
+
 
 var CmdWeb = cli.Command{
 	Name: "web",
@@ -16,6 +21,7 @@ var CmdWeb = cli.Command{
 }
 
 func runWeb(*cli.Context) {
+	var geocoder zip.Point
 	log.Printf("Web runs on Port %d", 12385)
 
 	db, err := leveldb.OpenFile("zipdata", nil)
@@ -25,7 +31,17 @@ func runWeb(*cli.Context) {
 	defer db.Close()
 	zip := "95111"
 	geo, err := db.Get([]byte(zip), nil)
-	fmt.Printf("Geo= %v", geo)
+	if err != nil {
+		log.Fatal("Canot found the zip code")
+	}
+	fmt.Printf("Geo Byte Array: %v", geo)
+
+	buffer := bytes.NewReader(geo)
+	err = binary.Read(buffer, binary.LittleEndian, &geocoder)
+	if err != nil {
+		fmt.Println("binary.Read failed:", err)
+	}
+	fmt.Println("Geo Coder: %v", geocoder)
 
 	log.Println("Finish webing!")
 }

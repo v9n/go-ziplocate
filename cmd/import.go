@@ -8,12 +8,8 @@ import (
 	"github.com/jonas-p/go-shp"
 	//"code.google.com/p/leveldb-go/leveldb"
 	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/kureikain/go-ziplocate/lib"
 )
-
-type Point struct {
-	X float64 
-	Y float64
-}
 
 var CmdImport = cli.Command{
 	Name: "import",
@@ -48,7 +44,7 @@ func open(file string) {
 	defer db.Close()
 
 	// loop through all features in the shapefile
-	var centroid Point
+	var centroid zip.Point
 	var boundary shp.Box
 	for shape.Next() {
 			n, p := shape.Shape()
