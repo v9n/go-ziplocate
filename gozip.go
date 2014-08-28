@@ -2,7 +2,7 @@ package main
 
 import (
     "os"
-    "runtime"
+    //"runtime"
     "github.com/codegangsta/cli"
     "github.com/kureikain/go-ziplocate/cmd"
 )

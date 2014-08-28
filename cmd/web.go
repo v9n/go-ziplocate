@@ -1,11 +1,7 @@
 package cmd
 
-web (
-	"fmt"
+import (
 	"log"
-	"os"
-	"path"
-	"time"
 	"github.com/codegangsta/cli"
 )
 
