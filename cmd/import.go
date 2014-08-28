@@ -10,7 +10,7 @@ import (
 
 var CmdImport = cli.Command{
 	Name: "import",
-	Usage: "import -f shapefile",
+	Usage: "import -file /absolute/path/to/shapefile.shp",
 	Description: `Import shapefile into GoZip database which is backed by leveldb`,
 	Action: runImport,
 	Flags: []cli.Flag{
