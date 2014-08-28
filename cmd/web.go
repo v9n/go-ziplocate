@@ -11,6 +11,9 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/syndtr/goleveldb/leveldb"
 	zipi "github.com/kureikain/go-ziplocate/lib"
+	"net/http"	
+	"encoding/json"
+	"io"
 )
 
 var CmdWeb = cli.Command{
@@ -18,7 +21,13 @@ var CmdWeb = cli.Command{
 	Usage: "web -p port",
 	Description: `Run API server on the specify port. default to 12385`,
 	Action: runWeb,
-	Flags: []cli.Flag{},
+	Flags: []cli.Flag{
+		cli.IntFlag{
+			Name: "p",
+			Value: 0,
+			Usage: "port to bind",
+		},
+},
 }
 
 func runWeb(c *cli.Context) {
@@ -30,10 +39,22 @@ func runWeb(c *cli.Context) {
 		log.Fatal("Db not found")
 	}
 	defer db.Close()
-	zip := "95111"
-	fetchZip(db, zip)
+	http.HandleFunc("/api", func (w http.ResponseWriter, r *http.Request) {
+		zip := "95111"
+		result := fetchZip(db, zip)
+		b, err := json.Marshal(result)
+		if err != nil {
+			io.WriteString(w, "ZIp not found")
+		} else {
+			io.WriteString(w, string(b))
+		}
+	})
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+  if err != nil {
+		panic(err)
+  }
 	log.Println("Finish webing!")
-	fetchAllZip(db)
+	//fetchAllZip(db)
 }
 
 func fetchZip(db *leveldb.DB, zip string) *zipi.Point {
