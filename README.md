@@ -56,6 +56,13 @@ $ go test
 
 # Build the database yourself
 
+I use LevelDB to storage data. The data is imported from shape file
+which can be downlaod here:
+https://www.census.gov/geo/maps-data/data/tiger-line.html
+
+The data is ready for your using. However, if you want to re-build it
+from source, here you go:
+
 ```
 $ wget ftp://ftp2.census.gov/geo/tiger/TIGER2014/ZCTA5/tl_2014_us_zcta510.zip
 $ unzip tl_2014_us_zcta510.zip
