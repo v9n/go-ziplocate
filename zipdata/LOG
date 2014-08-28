@@ -1,0 +1,9 @@
+=============== Aug 28, 2014 (PDT) ===============
+01:12:05.173646 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock D·DeletedEntry L·Level Q·SeqNum T·TimeElapsed
+01:12:05.174140 db@open opening
+01:12:05.174336 journal@recovery F·1
+01:12:05.174771 journal@recovery recovering @5
+01:12:05.175938 db@janitor F·3 G·0
+01:12:05.176001 db@open done T·1.846075ms
+01:12:05.264192 db@close closing
+01:12:05.264501 db@close done T·285.983us
