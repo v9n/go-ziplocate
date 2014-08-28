@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"reflect"
+	"fmt"
 	"log"
 	"github.com/codegangsta/cli"
 	"github.com/jonas-p/go-shp"
@@ -11,12 +13,18 @@ var CmdImport = cli.Command{
 	Usage: "gozip -f shapefile",
 	Description: `Import shapefile into GoZip database which is backed by leveldb`,
 	Action: runImport,
-	Flags: []cli.Flag{},
+	Flags: []cli.Flag{
+		cli.StringFlag{
+			Name: "file",
+			Value: "",
+			Usage: "shp file path to import",
+		},
+	},
 }
 
-func runImport(*cli.Context) {
-	log.Printf("Importing local repositories...%s", "tl_2014_us_zcta510.shp")
-
+func runImport(c *cli.Context) {
+	var file = c.String("file")
+	log.Printf("Importing local repositories...%s", file)
 	log.Println("Finish importing!")
 }
 
