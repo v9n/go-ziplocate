@@ -57,7 +57,13 @@ func open(file string) {
 			fmt.Println(centroid)
 			
 			//This is a naive way to convert struct to string to byte. Probably http://golang.org/pkg/encoding/gob/ is better
-			db.Put([]byte(shape.ReadAttribute(n, 0)), []byte(fmt.Sprintf("%v", centroid)), nil)
+			//db.Put([]byte(shape.ReadAttribute(n, 0)), []byte(fmt.Sprintf("%v", centroid)), nil)
+			db.Put([]byte(shape.ReadAttribute(n, 0)), []byte(fmt.Sprintf("%f:%f", centroid.X, centroid.Y)), nil)
+			//centroiByte, err := centroid.GobEncode()
+			//if err != nil {
+				//log.Fatal("Cannot encoding")
+			//}
+			//db.Put([]byte(shape.ReadAttribute(n, 0)), centroiByte, nil)
 
 			// print attributes
 			for k, f := range fields {
