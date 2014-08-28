@@ -1,9 +1,10 @@
 =============== Aug 28, 2014 (PDT) ===============
-01:21:01.368082 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock D·DeletedEntry L·Level Q·SeqNum T·TimeElapsed
-01:21:01.368526 db@open opening
-01:21:01.368706 journal@recovery F·1
-01:21:01.369123 journal@recovery recovering @9
-01:21:01.370515 db@janitor F·3 G·0
-01:21:01.370552 db@open done T·2.00828ms
-01:21:01.370846 db@close closing
-01:21:01.370997 db@close done T·148us
+12:02:33.043427 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock D·DeletedEntry L·Level Q·SeqNum T·TimeElapsed
+12:02:33.043821 db@open opening
+12:02:33.044112 journal@recovery F·1
+12:02:33.044542 journal@recovery recovering @69
+12:02:33.195408 mem@flush created L0@71 N·33144 S·746KiB "0..1,v92376":"9..9,v81734"
+12:02:33.200260 db@janitor F·5 G·0
+12:02:33.200292 db@open done T·156.458274ms
+12:02:33.516993 db@close closing
+12:02:33.517673 db@close done T·673.942us
