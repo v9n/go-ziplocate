@@ -25,7 +25,7 @@ var CmdWeb = cli.Command{
 	Flags: []cli.Flag{
 		cli.IntFlag{
 			Name: "p",
-			Value: 0,
+			Value: 12385,
 			Usage: "port to bind",
 		},
 },
