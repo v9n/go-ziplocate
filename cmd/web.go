@@ -68,7 +68,7 @@ func runWeb(c *cli.Context) {
 		}
 	})
 	mux.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("curl -i domain/api/zip"))
+		w.Write([]byte("curl -i gozip.axcoto.com/api/zip.<br />curl -i gozip.axcoto.com/api/77544"))
 	})
 
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), mux)
