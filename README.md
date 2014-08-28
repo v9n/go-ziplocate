@@ -3,6 +3,13 @@ go-ziplocate
 
 Clone https://github.com/nathancahill/ZipLocate/ in Go Lang
 
+The pre-built binary is for MAC. Please rebuild if you use Linux
+
+```
+$ go get
+$ go build
+```
+
 # Using
 
 ```
@@ -49,8 +56,11 @@ $ go test
 
 # Build the database yourself
 
-$ wget wget ftp://ftp2.census.gov/geo/tiger/TIGER2014/ZCTA5/tl_2014_us_zcta510.zip
-$ ./import tl_2014_us_zcta510.zip
+```
+$ wget ftp://ftp2.census.gov/geo/tiger/TIGER2014/ZCTA5/tl_2014_us_zcta510.zip
+$ unzip tl_2014_us_zcta510.zip
+$ go-ziplocate import -file tl_2014_us_zcta510.zip
+```
 
 # Demo
 
