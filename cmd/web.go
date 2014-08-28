@@ -43,6 +43,7 @@ func runWeb(c *cli.Context) {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/", func (w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
 		log.Printf(r.URL.Path)
 		urlSegment := strings.Split(r.URL.Path, "/")
 		if len(urlSegment)<2 {
@@ -57,9 +58,8 @@ func runWeb(c *cli.Context) {
 		if err != nil {
 			io.WriteString(w, "{\"error\":\"Zip not found\"}")
 		} else {
-
-			b, err := json.Marshal(result)
-			w.Header().Set("Content-Type", "application/json")
+			geo := struct{ Lat, Lng float64}{result.Y, result.X}
+			b, err := json.Marshal(geo)
 			if err != nil {
 				io.WriteString(w, "{\"error\":\"Zip not found\"}")
 			} else {
