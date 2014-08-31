@@ -52,6 +52,61 @@ server {
 
 }
 ```
+# Benchmark
+
+
+```
+ab -n 500 -c 500 http://gozip.axcoto.com/api/10097
+This is ApacheBench, Version 2.3 <$Revision: 655654 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking gozip.axcoto.com (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Finished 500 requests
+
+
+Server Software:        nginx
+Server Hostname:        gozip.axcoto.com
+Server Port:            80
+
+Document Path:          /api/10097
+Document Length:        25 bytes
+
+Concurrency Level:      500
+Time taken for tests:   2.043 seconds
+Complete requests:      500
+Failed requests:        0
+Write errors:           0
+Total transferred:      83500 bytes
+HTML transferred:       12500 bytes
+Requests per second:    244.72 [#/sec] (mean)
+Time per request:       2043.180 [ms] (mean)
+Time per request:       4.086 [ms] (mean, across all concurrent requests)
+Transfer rate:          39.91 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       57   63   3.9     63      70
+Processing:    86  576 499.0    376    1960
+Waiting:       85  576 499.0    376    1960
+Total:        143  639 502.1    440    2029
+
+Percentage of the requests served within a certain time (ms)
+  50%    440
+  66%    948
+  75%    973
+  80%    981
+  90%   1006
+  95%   2017
+  98%   2026
+  99%   2027
+ 100%   2029 (longest request)
+```
 
 # How
 
