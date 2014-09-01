@@ -57,20 +57,15 @@ func openWithHandler(file string, handler func(zip string, geocoder []byte) bool
 	for shape.Next() {
 			n, p := shape.Shape()
 			boundary = p.BBox()
-			// print feature
 			fmt.Println(reflect.TypeOf(p).Elem(), boundary)
-
 			centroid.X = (boundary.MinX + boundary.MaxX) / 2
 			centroid.Y = (boundary.MinY + boundary.MaxY) / 2
 			fmt.Println(centroid)
-			
 			//This is a naive way to convert struct to string to byte. Probably http://golang.org/pkg/encoding/gob/ is better
-			//db.Put([]byte(shape.ReadAttribute(n, 0)), []byte(fmt.Sprintf("%v", centroid)), nil)
 			handler(shape.ReadAttribute(n, 0), []byte(fmt.Sprintf("%f:%f", centroid.X, centroid.Y)))
 			for k, f := range fields {
 					val := shape.ReadAttribute(n, k)
 					fmt.Printf("\t%v: %v\n", f, val)
 			}
-			fmt.Println()
 	}
 }
