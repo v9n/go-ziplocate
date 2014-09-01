@@ -28,20 +28,28 @@ var CmdImport = cli.Command{
 func runImport(c *cli.Context) {
 	var file = c.String("file")
 	log.Printf("Importing local repositories...%s", file)
-	open(file)
+	
+	db, err := leveldb.OpenFile("zipdata", nil)
+	if err != nil {
+		log.Fatal("Cannot create database")
+	}
+
+	defer db.Close()
+
+	openWithHandler(file, func (zip string, geocoder []byte) bool {
+		db.Put([]byte(zip), geocoder, nil)
+		return true
+	})
 	log.Println("Finish importing!")
 }
 
-func open(file string) {
+func openWithHandler(file string, handler func(zip string, geocoder []byte) bool) {
 	shape, err := shp.Open(file)
 	if err != nil { log.Fatal(err) } 
 	defer shape.Close()
 
 	// fields from the attribute table (DBF)
 	fields := shape.Fields()
-
-	db, err := leveldb.OpenFile("zipdata", nil)
-	defer db.Close()
 
 	// loop through all features in the shapefile
 	var centroid zip.Point
@@ -58,14 +66,7 @@ func open(file string) {
 			
 			//This is a naive way to convert struct to string to byte. Probably http://golang.org/pkg/encoding/gob/ is better
 			//db.Put([]byte(shape.ReadAttribute(n, 0)), []byte(fmt.Sprintf("%v", centroid)), nil)
-			db.Put([]byte(shape.ReadAttribute(n, 0)), []byte(fmt.Sprintf("%f:%f", centroid.X, centroid.Y)), nil)
-			//centroiByte, err := centroid.GobEncode()
-			//if err != nil {
-				//log.Fatal("Cannot encoding")
-			//}
-			//db.Put([]byte(shape.ReadAttribute(n, 0)), centroiByte, nil)
-
-			// print attributes
+			handler(shape.ReadAttribute(n, 0), []byte(fmt.Sprintf("%f:%f", centroid.X, centroid.Y)))
 			for k, f := range fields {
 					val := shape.ReadAttribute(n, k)
 					fmt.Printf("\t%v: %v\n", f, val)
